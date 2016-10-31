@@ -174,11 +174,11 @@
     p))
 
 ;(require 'smart-compile)
-(global-set-key (kbd "<f7>") 'psenv-compile)
-(defun psenv-compile ()
-  (interactive)
-  (compile
-   (format "powershell %s build" "d:/code/psenv/psenv.ps1")))
+;(global-set-key (kbd "<f7>") 'psenv-compile)
+;(defun psenv-compile ()
+;  (interactive)
+;  (compile
+;   (format "powershell %s build" "d:/code/psenv/psenv.ps1")))
 
 ;(require 'cosmos)
              
@@ -230,7 +230,7 @@
 ; '(ace-isearch-function 'avy-goto-char-2)
 ; '(ace-isearch-use-jump 'printing-char))
 ;(define-key isearch-mode-map (kbd "M-SPC") 'ace-isearch-jump-during-isearch)
-(require 'server)
+;(require 'server)
 
 ;(defun server-ensure-safe-dir (dir) "Noop" t)
                                         ;(setq server-use-tcp t)
