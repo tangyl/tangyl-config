@@ -82,12 +82,21 @@
 ;(setq projectile-completion-system 'helm)
 ;(helm-projectile-on)
 
+(cond ((eq system-type 'darwin)
+       nil)
+      )
+
+
 (when (window-system)
-  (set-face-font 'default "Consolas")
-  (set-face-attribute 'default nil :family "Consolas" :height 120)
-  (load-theme 'darkokai t)
+  (load-theme 'darkokai t))
+	
+
+;(when (window-system)
+;  (set-face-font 'default "Consolas")
+;  (set-face-attribute 'default nil :family "Consolas" :height 120)
+;  (load-theme 'darkokai t)
                                         ;(load-theme 'monokai t)
-  )
+;  )
 
 ;; tab
 (setq-default indent-tabs-mode nil)
