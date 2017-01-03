@@ -1,11 +1,18 @@
                                         ;(file-name-directory load-file-name)
 (require 'package) ;; You might already have this line
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/"))
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
+
+(setq exec-path (append exec-path '("/usr/local/bin")))
+(setq exec-path (append exec-path '("~/.sdkman/candidates/sbt/current/bin")))
+(setq exec-path (append exec-path '("~/.sdkman/candidates/scala/current/bin")))
+
+(setq url-proxy-service '(("http" . "127.0.0.1:1087")
+                          ("https" . "127.0.0.1:1087")))
 
 (setq default-process-coding-system 'utf-8)
 (setq buffer-file-coding-system 'utf-8)
@@ -16,60 +23,83 @@
       (package-refresh-contents))
     (package-install pkg)))
 
-(require-package 'monokai-theme)
-(require-package 'darkokai-theme)
-(require-package 'csharp-mode)
-(require-package 'projectile)
-(require-package 'grizzl)
-(require-package 'helm)
-(require-package 'helm-ag)
+(use-package monokai-theme :ensure t)
+(use-package helm :ensure t)
+(use-package helm-ag :ensure t)
+(use-package helm-descbinds :ensure t)
+(use-package helm-swoop :ensure t)
+(use-package company :ensure t)
+(use-package avy :ensure t)
+(use-package magit :ensure t)
+(use-package yasnippet :ensure t)
+;(use-package dired+ :ensure t)
+;(use-package dired-details :ensure t)
+;(use-package dired-details+ :ensure t)
+(use-package vlf :ensure t)
+(use-package smex :ensure t)
+(use-package ensime :ensure t :pin melpa-stable)
+(use-package ido-vertical-mode :ensure t)
+(use-package yaml-mode :ensure t)
+(use-package pyvenv :ensure t)
+(use-package elpy :ensure t)
+
+;(require-package 'monokai-theme)
+;(require-package 'darkokai-theme)
+;(require-package 'csharp-mode)
+;(require-package 'projectile)
+;(require-package 'grizzl)
+;(require-package 'helm)
+;(require-package 'helm-ag)
 ;(require-package 'ace-isearch)
 ;(require-package 'helm-core)
 ;(require-package 'helm-projectile)
 ;(require-package 'helm-flycheck)
-(require-package 'helm-descbinds)
-(require-package 'image+)
+;(require-package 'helm-descbinds)
+;(require-package 'image+)
 ;(require-package 'auto-complete)
-(require-package 'company)
+;(require-package 'company)
 ;(require-package 'cider)
 ;(require-package 'cider-decompile)
 ;(require-package 'nlinum)
-(require-package 'fsharp-mode)
-(require-package 'yasnippet)
+;(require-package 'fsharp-mode)
+;(require-package 'yasnippet)
 ;(require-package 'smart-tabs-mode)
-(require-package 'dired+)
-(require-package 'helm-swoop)
+;(require-package 'dired+)
+;(require-package 'helm-swoop)
 ;(require-package 'ace-jump-mode)
-(require-package 'ace-window)
-(require-package 'w32-browser)
+;(require-package 'ace-window)
+;(require-package 'w32-browser)
 ;(require-package 'direx)
-(require-package 'bookmark+)
-(require-package 'avy)
-(require-package 'magit)
+;(require-package 'bookmark+)
+;(require-package 'avy)
+;(require-package 'magit)
 ;(require-package 'paradox)
 ;(require-package 'aggressive-indent)
 ;(require-package 'helm-projectile)
-(require-package 'powershell)
-(require-package 'yasnippet)
-(require-package 'dired-details)
-(require-package 'dired-details+)
+;(require-package 'powershell)
+;(require-package 'yasnippet)
+;(require-package 'dired-details)
+;(require-package 'dired-details+)
 ;(require-package 'powerline)
 ;(require-package 'yafolding)
 ;(require-package 'origami)
-(require-package 'omnisharp)
+;(require-package 'omnisharp)
 ;(require-package 'flycheck)
 ;(require-package 'ensime)
 ;(require-package 'scala-mode2)
 ;(require-package 'sbt-mode)
-(require-package 'vlf) ;; read very large file
+;(require-package 'vlf) ;; read very large file
 ;(require-package 'smart-mode-line)
 ;(require-package 'vimish-fold)
-(require-package 'window-number)
+;(require-package 'window-number)
 ;(require-package 'persp-mode)
 ;(require-package 'nyan-mode)
                                         ;(require-package 'spaceline)
-(require-package 'ido-vertical-mode)
-(require-package 'smex)
+;(require-package 'ido-vertical-mode)
+;(require-package 'smex)
+(use-package ensime
+             :ensure t
+             :pin melpa-stable)
 
 ; smart-mode-line
 ; https://github.com/Malabarba/smart-mode-line
@@ -82,14 +112,18 @@
 ;(setq projectile-completion-system 'helm)
 ;(helm-projectile-on)
 
-(cond ((eq system-type 'darwin)
-       nil)
-      )
+;(cond ((eq system-type 'darwin)
+;       (progn
+;         (setq mac-option-modifier 'super)
+;         (setq mac-command-modifier 'meta))
+;       nil)
+;      )
 
 
-(when (window-system)
-  (load-theme 'darkokai t))
-	
+;(when (window-system)
+;  (load-theme 'darkokai t))
+
+(set-face-attribute 'default 'nil :height 145 :family "Monaco")
 
 ;(when (window-system)
 ;  (set-face-font 'default "Consolas")
@@ -119,7 +153,7 @@
 ;(ido-mode nil)
 (require 'ibuffer)
 
-(require 'dired+)
+;(require 'dired+)
 
 ;(unless (eq system-type 'cygwin)
 ;  (setq magit-git-executable (concat (getenv "TOOLBOX") "/PortableGit/cmd/git.exe")))
@@ -216,9 +250,9 @@
 (setq company-dabbrev-downcase nil)
 (global-company-mode 1)
 
-(require 'window-number)
+;(require 'window-number)
 ;(require 'spaceline-config)
-(window-number-mode)
+;(window-number-mode)
 
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -244,3 +278,17 @@
 ;(defun server-ensure-safe-dir (dir) "Noop" t)
                                         ;(setq server-use-tcp t)
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (scala-mode sbt-mode markdown-mode ensime expand-region thingatpt+ thingopt go-mode multi-term thrift gradle-mode company elpy highlight-indentation pyvenv yaml-mode docker dockerfile-mode yasnippet window-number w32-browser vlf smex projectile powershell omnisharp monokai-theme magit image+ ido-vertical-mode helm-swoop helm-descbinds helm-ag grizzl fsharp-mode dired-details+ dired+ darkokai-theme bookmark+ ace-window))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
