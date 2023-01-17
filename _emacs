@@ -26,10 +26,22 @@
 (straight-use-package 'helm-rg)
 (straight-use-package 'nim-mode)
 (straight-use-package 'yaml-mode)
+(straight-use-package 'quarto-mode)
+(straight-use-package 'eglot)
+(straight-use-package 'julia-mode)
+(straight-use-package 'typescript-mode)
+(straight-use-package 'helm-projectile)
+
+(require 'helm-projectile)
+
+(require 'quarto-mode)
+
 (global-company-mode t)
 (global-linum-mode t)
 
 (straight-use-package '(nextflow-mode :type git :host github :repo "Emiller88/nextflow-mode"))
+
+(tool-bar-mode 0)
 
 ;; theme
 (load-theme 'monokai t)
@@ -70,9 +82,15 @@
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x p f") 'helm-projectile-find-file)
 
 (setq helm-rg-default-directory 'git-root)
 (global-set-key (kbd "<f6>") 'helm-rg)
+
+(setq directory-abbrev-alist
+      '(("^/home/sdev" . "/Users/tangyl/Repo")
+        ("^/data01/home/sdev" . "/Users/tangyl/Repo")
+        ))
 
 
 (custom-set-variables
