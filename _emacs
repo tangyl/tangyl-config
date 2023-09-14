@@ -16,6 +16,16 @@
 
 (setq straight-use-package-by-default t)
 
+(setq image-types '(png gif tiff jpeg xpm xbm pbm))
+
+(defun image-type-available-p (type)
+  "Return t if image type TYPE is available.
+Image types are symbols like `xbm' or `jpeg'."
+  (if (eq 'svg type)
+      nil
+    (and (fboundp 'init-image-library)
+         (init-image-library type))))
+
 ;; packages
 (straight-use-package 'helm)
 (straight-use-package 'el-patch)
@@ -31,6 +41,9 @@
 (straight-use-package 'julia-mode)
 (straight-use-package 'typescript-mode)
 (straight-use-package 'helm-projectile)
+(straight-use-package 'go-mode)
+;(straight-use-package 'lsp-mode)
+;(straight-use-package 'lsp-ui) 
 
 (require 'helm-projectile)
 
@@ -92,6 +105,7 @@
         ("^/data01/home/sdev" . "/Users/tangyl/Repo")
         ))
 
+(set-face-attribute 'default nil :height 150)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
