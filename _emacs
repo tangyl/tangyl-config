@@ -90,3 +90,10 @@ Image types are symbols like `xbm' or `jpeg'."
 (menu-bar-mode 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
+
+(defun open-files-in-read-only-mode ()
+  ;(unless (eq major-mode 'dired-mode)
+  (read-only-mode 1))
+
+
+(add-hook 'find-file-hook 'open-files-in-read-only-mode)
