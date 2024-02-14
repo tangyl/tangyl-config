@@ -60,7 +60,9 @@ Image types are symbols like `xbm' or `jpeg'."
 (straight-use-package 'treemacs)
 (straight-use-package 'telephone-line)
 (straight-use-package 'ein)
+(straight-use-package 'doom-modeline)
 
+(doom-modeline-mode t)
 
 (global-set-key (kbd "C-`") 'set-mark-command)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -68,14 +70,8 @@ Image types are symbols like `xbm' or `jpeg'."
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x p f") 'helm-projectile-find-file)
 
-(setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-      telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-      telephone-line-primary-right-separator 'telephone-line-cubed-right
-      telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 ;(setq telephone-line-height 18
-;      telephone-line-evil-use-short-tag t)
-
-(telephone-line-mode t)
+					;      telephone-line-evil-use-short-tag t)
 
 (setq helm-rg-default-directory 'git-root)
 (global-set-key (kbd "<f6>") 'helm-rg)
@@ -88,12 +84,20 @@ Image types are symbols like `xbm' or `jpeg'."
 (set-face-font 'default "Monaco")
 (set-face-attribute 'default nil :height 130)
 (menu-bar-mode 1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
+(unless (display-graphic-p)
+  (set-face-background 'vertical-border "#252534")
+  (set-face-foreground 'vertical-border (face-background 'vertical-border))
+  (xterm-mouse-mode 1))
 
-(defun open-files-in-read-only-mode ()
+;(scroll-bar-mode -1)
+;(tool-bar-mode -1)
+
+;(defun open-files-in-read-only-mode ()
   ;(unless (eq major-mode 'dired-mode)
-  (read-only-mode 1))
+;  (read-only-mode 1))
 
 
-(add-hook 'find-file-hook 'open-files-in-read-only-mode)
+;(add-hook 'find-file-hook 'open-files-in-read-only-mode)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq-default c-basic-offset 4)
