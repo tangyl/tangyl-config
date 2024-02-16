@@ -1,3 +1,11 @@
+;; set proxy in gui mode
+(when (display-graphic-p)
+  (setq url-proxy-services
+	'(("http" . "127.0.0.1:7890")
+	  ("https" . "127.0.0.1:7890")))
+  (setenv "http_proxy" "127.0.0.1:7890")
+  (setenv "https_proxy" "127.0.0.1:7890"))
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -52,6 +60,7 @@ Image types are symbols like `xbm' or `jpeg'."
 (straight-use-package 'eglot)
 (straight-use-package 'julia-mode)
 (straight-use-package 'typescript-mode)
+(straight-use-package 'projectile)
 (straight-use-package 'helm-projectile)
 (straight-use-package 'go-mode)
 (straight-use-package 'monokai-theme)
@@ -61,8 +70,34 @@ Image types are symbols like `xbm' or `jpeg'."
 (straight-use-package 'telephone-line)
 (straight-use-package 'ein)
 (straight-use-package 'doom-modeline)
+(straight-use-package 'dashboard)
+(straight-use-package 'nerd-icons)
 
 (doom-modeline-mode t)
+
+(straight-use-package 'protobuf-mode)
+
+(straight-use-package 'all-the-icons)
+(straight-use-package 'treemacs-nerd-icons)
+
+;; dashboard setup
+(dashboard-setup-startup-hook)
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard")))
+
+(setq dashboard-items '((recents . 5)
+                        (bookmarks . 5)
+                        (projects . 5)
+                        (registers . 5)))
+(setq dashboard-icon-type 'nerd-icons)
+(setq dashboard-display-icons-p t)
+;(setq dashboard-set-heading-icons t)
+;(setq dashboard-set-file-icons t)
+
+;(straight-use-package 'treemacs-all-the-icons)
+
+(require 'treemacs)
+(require 'treemacs-nerd-icons)
+(treemacs-load-theme "nerd-icons")
 
 (global-set-key (kbd "C-`") 'set-mark-command)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -84,6 +119,7 @@ Image types are symbols like `xbm' or `jpeg'."
 (set-face-font 'default "Monaco")
 (set-face-attribute 'default nil :height 130)
 (menu-bar-mode 1)
+
 (unless (display-graphic-p)
   (set-face-background 'vertical-border "#252534")
   (set-face-foreground 'vertical-border (face-background 'vertical-border))
@@ -92,12 +128,18 @@ Image types are symbols like `xbm' or `jpeg'."
 ;(scroll-bar-mode -1)
 ;(tool-bar-mode -1)
 
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
+
 ;(defun open-files-in-read-only-mode ()
   ;(unless (eq major-mode 'dired-mode)
 ;  (read-only-mode 1))
 
 
 ;(add-hook 'find-file-hook 'open-files-in-read-only-mode)
+
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default c-basic-offset 4)
