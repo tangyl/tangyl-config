@@ -72,6 +72,12 @@ Image types are symbols like `xbm' or `jpeg'."
 (straight-use-package 'doom-modeline)
 (straight-use-package 'dashboard)
 (straight-use-package 'nerd-icons)
+(straight-use-package 'nerd-icons-dired)
+(straight-use-package 'clang-format)
+(straight-use-package 'xterm-color)
+(straight-use-package 'highlight-indent-guides)
+(straight-use-package 'which-key)
+(straight-use-package 'helm-icons)
 
 (doom-modeline-mode t)
 
@@ -80,16 +86,23 @@ Image types are symbols like `xbm' or `jpeg'."
 (straight-use-package 'all-the-icons)
 (straight-use-package 'treemacs-nerd-icons)
 
+(setq which-key-show-early-on-C-h t)
+(which-key-setup-side-window-bottom)
+
+
 ;; dashboard setup
 (dashboard-setup-startup-hook)
-(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard")))
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
-(setq dashboard-items '((recents . 5)
+(setq dashboard-items '((recents . 10)
                         (bookmarks . 5)
                         (projects . 5)
                         (registers . 5)))
 (setq dashboard-icon-type 'nerd-icons)
 (setq dashboard-display-icons-p t)
+
+(require 'helm-projectile)
+(setq helm-buffer-max-length 40)
 ;(setq dashboard-set-heading-icons t)
 ;(setq dashboard-set-file-icons t)
 
@@ -99,17 +112,55 @@ Image types are symbols like `xbm' or `jpeg'."
 (require 'treemacs-nerd-icons)
 (treemacs-load-theme "nerd-icons")
 
+(require 'nerd-icons)
+(require 'nerd-icons-dired)
+(add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
+(setq helm-icons-provider 'nerd-icons)
+(helm-icons-enable)
+
+(add-hook 'c++-mode-hook 'hs-minor-mode)
+
+(global-company-mode t)
+(global-display-line-numbers-mode t)
+
+(global-hl-line-mode t)
+
+(setq compilation-search-path '("/data/home/yilong.tang/Repo/search"))
+
 (global-set-key (kbd "C-`") 'set-mark-command)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x p f") 'helm-projectile-find-file)
+(global-set-key (kbd "C-c TAB") 'hs-toggle-hiding)
+
+(require 'eglot)
+(add-to-list 'eglot-server-programs '((c++-mode c-mode) . ("clangd" "--query-driver=/usr/bin/g++" "--pretty" "--log=verbose")))
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+
+
+(require 'xterm-color)
+(setq compilation-environment '("TERM=xterm-256color"))
+(defun my/advice-compilation-filter (f proc string)
+  (funcall f proc (xterm-color-filter string)))
+(advice-add 'compilation-filter :around #'my/advice-compilation-filter)
+  
+
+(defun run-compile (&optional args)
+  (interactive)
+  (let* ((root (project-root (project-current t)))
+         (command (format "cd %s; bash .f5" root)))
+    (compile command)))
+
+(global-set-key (kbd "<f5>") 'run-compile)
 
 ;(setq telephone-line-height 18
 					;      telephone-line-evil-use-short-tag t)
 
 (setq helm-rg-default-directory 'git-root)
 (global-set-key (kbd "<f6>") 'helm-rg)
+(global-set-key (kbd "<f7>") 'clang-format-buffer)
 
 ;(setq directory-abbrev-alist
 ;      '(("^/home/sdev" . "/Users/tangyl/Repo")
@@ -121,14 +172,14 @@ Image types are symbols like `xbm' or `jpeg'."
 (menu-bar-mode 1)
 
 (unless (display-graphic-p)
-  (set-face-background 'vertical-border "#252534")
+  (set-face-background 'vertical-border "#181818")
   (set-face-foreground 'vertical-border (face-background 'vertical-border))
   (xterm-mouse-mode 1))
 
 ;(scroll-bar-mode -1)
 ;(tool-bar-mode -1)
 
-(scroll-bar-mode -1)
+;(scroll-bar-mode -1)
 (tool-bar-mode -1)
 (unless (display-graphic-p)
   (xterm-mouse-mode 1))
@@ -162,3 +213,32 @@ Image types are symbols like `xbm' or `jpeg'."
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
+(require 'transient)
+(transient-define-prefix compile-menu ()
+  "Compile Magic"
+  :info-manual "Quick commands for compile/edit"
+  [("c" "Compile" run-compile)
+   ("f" "Format" (lambda ()
+                   (interactive)
+                   (with-current-buffer (window-buffer (minibuffer-selected-window))
+                     (message (format "current bufffer %s" (current-buffer)))
+                     (clang-format-buffer))))
+   ("q" "Quit" transient-quit-one)])
+
+(global-set-key (kbd "C-x m") #'compile-menu)
+(global-set-key (kbd "<home>") #'compile-menu)
+                
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("b95f61aa5f8a54d494a219fcde9049e23e3396459a224631e1719effcb981dbd" default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
