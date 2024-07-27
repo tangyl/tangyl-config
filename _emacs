@@ -70,8 +70,12 @@ Image types are symbols like `xbm' or `jpeg'."
 (straight-use-package 'telephone-line)
 (straight-use-package 'ein)
 (straight-use-package 'doom-modeline)
-(straight-use-package 'dashboard)
+;(straight-use-package 'dashboard)
 (straight-use-package 'nerd-icons)
+(straight-use-package 'cider)
+
+(global-company-mode t)
+;(global-set-key (kbd "<tab>") #'company-indent-or-complete-common)
 
 (doom-modeline-mode t)
 
@@ -81,19 +85,20 @@ Image types are symbols like `xbm' or `jpeg'."
 (straight-use-package 'treemacs-nerd-icons)
 
 ;; dashboard setup
-(dashboard-setup-startup-hook)
-(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard")))
+;(dashboard-setup-startup-hook)
+;(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard")))
 
-(setq dashboard-items '((recents . 5)
-                        (bookmarks . 5)
-                        (projects . 5)
-                        (registers . 5)))
-(setq dashboard-icon-type 'nerd-icons)
-(setq dashboard-display-icons-p t)
+;(setq dashboard-items '((recents . 5)
+;                        (bookmarks . 5)
+;                        (projects . 5)
+;                        (registers . 5)))
+;(setq dashboard-icon-type 'nerd-icons)
+;(setq dashboard-display-icons-p t)
 ;(setq dashboard-set-heading-icons t)
 ;(setq dashboard-set-file-icons t)
 
-;(straight-use-package 'treemacs-all-the-icons)
+(global-display-line-numbers-mode t)
+                                        ;(straight-use-package 'treemacs-all-the-icons)
 
 (require 'treemacs)
 (require 'treemacs-nerd-icons)
@@ -111,6 +116,14 @@ Image types are symbols like `xbm' or `jpeg'."
 (setq helm-rg-default-directory 'git-root)
 (global-set-key (kbd "<f6>") 'helm-rg)
 
+(defun run-compile ()
+  (interactive)
+  (let* ((root (project-root (project-current t)))
+         (command (format "cd %s; bash .f5" root)))
+    (compile command)))
+
+(global-set-key (kbd "<f5>") 'run-compile)
+  
 ;(setq directory-abbrev-alist
 ;      '(("^/home/sdev" . "/Users/tangyl/Repo")
 ;	("^/data01/home/sdev" . "/Users/tangyl/Repo")
@@ -141,8 +154,8 @@ Image types are symbols like `xbm' or `jpeg'."
 ;(add-hook 'find-file-hook 'open-files-in-read-only-mode)
 
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq-default c-basic-offset 4)
+(setq-default tab-width 2)
+(setq-default c-basic-offset 2)
 
 ;; python config
 (setq treesit-language-source-alist
